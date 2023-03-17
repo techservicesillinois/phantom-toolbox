@@ -37,7 +37,7 @@ deps-doc:
 
 # Python packages needed to run tests
 deps-test:
-	$(PIP) coverage pytest
+	$(PIP) coverage pytest git+https://github.com/splunk/pytest-splunk-soar-connectors.git
 
 # Python packages needed to publish a production or test release
 deps-publish:

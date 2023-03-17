@@ -1,0 +1,56 @@
+{
+    "appid": "F3EAE4A9-73ED-4C48-B42F-FE257779B2B6",
+    "name": "Calculator",
+    "description": "Use to perform simple arithmetic operations",
+    "type": "generic",
+    "product_vendor": "None",
+    "product_name": "None",
+    "python_version": "3",
+    "product_version_regex": ".*",
+    "publisher": "ACME",
+    "license": "NCSA",
+    "app_version": "1.0",
+    "package_name": "calc",
+    "main_module": "calc.py",
+    "min_phantom_version": "5.3.3.92213",
+    "app_wizard_version": "1.0.0",
+    "configuration": {
+        "x": {
+            "description": "First Term",
+            "data_type": "numeric",
+            "required": true,
+            "order": 0,
+            "id": 0
+        },
+        "y": {
+            "description": "Second Term",
+            "data_type": "numeric",
+            "required": true,
+            "order": 1,
+            "id": 1
+        }
+    },
+    "actions": [
+        {
+            "action": "add",
+            "identifier": "add",
+            "description": "Returns x + y",
+            "type": "generic",
+            "read_only": true,
+            "parameters": {},
+            "output": [],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "subtract",
+            "identifier": "subtract",
+            "description": "Returns x - y",
+            "type": "generic",
+            "read_only": true,
+            "parameters": {},
+            "output": [],
+            "versions": "EQ(*)"
+        }
+    ],
+    "disabled": true
+}
