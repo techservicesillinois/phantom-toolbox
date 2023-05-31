@@ -137,6 +137,10 @@ jobs:
       if: steps.tox.outputs.valid != 'true'
       run: make install
 
+    - name: Run acceptance tests
+      run: |
+        make acceptance_test
+
     - name: Installed dependencies
       run: make freeze
 
