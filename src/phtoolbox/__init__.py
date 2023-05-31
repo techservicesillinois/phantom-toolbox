@@ -23,7 +23,7 @@ def init_parser():
     parser.add_argument(
         'command',
         type=str,
-        nargs="1",
+        nargs=1,
         help='Command to execute')
     parser.add_argument(
         "-f",
@@ -43,7 +43,7 @@ def init_parser():
         type=str,
         help="Phantom hostname",
         required=False)
-    return parser.parse_args()
+    return parser
 
 
 def _main(user_args=None):
@@ -61,6 +61,10 @@ def _main(user_args=None):
     sys.exit(return_code)
 
 
-if __name__ == "__main__":
-    args = init_parser()
+def main():
+    args = init_parser().parse_args()
     _main(user_args=args)
+
+
+if __name__ == "__main__":
+    main()
