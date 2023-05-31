@@ -1,9 +1,8 @@
-import pytest
-
 import phtoolbox
 
 
-def test_phantom():
-    """Regression test for issue #4."""
-    with pytest.raises(NotImplementedError):
-        phtoolbox._main()
+def test_bad_command():
+    '''Test that nonsense command returns -1'''
+    args = phtoolbox.init_parser().parse_args(["nonsense"])
+    result = phtoolbox._main(args)
+    assert result == 1

@@ -47,20 +47,20 @@ def init_parser():
 
 
 def _main(user_args=None):
-    args = init_parser()
 
-    if not args.token:
-        args.token = os.environ['SOAR_TOKEN']
+    if not user_args.token:
+        user_args.token = os.environ['SOAR_TOKEN']
 
-    if not args.hostname:
-        args.hostname = os.environ['SOAR_HOSTNAME']
+    if not user_args.hostname:
+        user_args.hostname = os.environ['SOAR_HOSTNAME']
 
     return_code = 1
-    if args.command == 'deploy':
-        return_code = deploy(args)
+    if user_args.command == 'deploy':
+        return_code = deploy(user_args)
 
     sys.exit(return_code)
 
 
 if __name__ == "__main__":
-    _main()
+    args = init_parser()
+    _main(user_args=args)
