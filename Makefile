@@ -37,7 +37,7 @@ deps-doc:
 
 # Python packages needed to run tests
 deps-test:
-	$(PIP) coverage pytest git+https://github.com/splunk/pytest-splunk-soar-connectors.git
+	$(PIP) coverage pytest git+https://github.com/splunk/pytest-splunk-soar-connectors.git robotframework
 
 # Python packages needed to publish a production or test release
 deps-publish:
@@ -91,7 +91,11 @@ win-tox: .win-tox build | cache
 
 # Run tests against wheel installed in virtualenv
 # test: lint static check .coverage  # TODO: Add coverage back when working
-test: lint static check
+test: lint static check acceptance_test
+
+accept: acceptance_test
+acceptance_test: deps-test .install
+	robot tests/robot
 
 # Run tests with coverage tool -- generates .coverage file
 .coverage: $(TOX_ENV) $(TSTS)

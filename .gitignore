@@ -24,3 +24,8 @@ docs/src/
 .venv
 .vscode
 .win-tox
+
+# Robot output
+log.html
+output.xml
+report.html
