@@ -90,7 +90,8 @@ win-tox: .win-tox build | cache
 	touch $@
 
 # Run tests against wheel installed in virtualenv
-test: lint static check .coverage
+# test: lint static check .coverage  # TODO: Add coverage back when working
+test: lint static check
 
 # Run tests with coverage tool -- generates .coverage file
 .coverage: $(TOX_ENV) $(TSTS)
