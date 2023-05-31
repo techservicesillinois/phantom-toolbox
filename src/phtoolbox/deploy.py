@@ -5,6 +5,7 @@ import base64
 import json
 import requests
 
+
 def deploy(args):
     file_contents = open(args.file, 'rb').read()
     encoded_contents = base64.b64encode(file_contents)

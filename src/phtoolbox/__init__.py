@@ -54,10 +54,10 @@ def _main(user_args=None):
 
     if not args.hostname:
         args.hostname = os.environ['SOAR_HOSTNAME']
-    
+
     return_code = 1
     if args.command == 'deploy':
-       return_code = deploy(args)
+        return_code = deploy(args)
 
     sys.exit(return_code)
 
