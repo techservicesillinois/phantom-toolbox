@@ -12,7 +12,7 @@ import argparse
 import os
 import sys
 
-from app.deploy import deploy
+from .deploy import deploy
 
 
 def init_parser():
