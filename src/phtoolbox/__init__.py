@@ -18,7 +18,8 @@ from .deploy import deploy
 def init_parser():
     parser = argparse.ArgumentParser(
         description=__doc__,
-        formatter_class=argparse.RawDescriptionHelpFormatter
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        prog="phantom"
     )
     parser.add_argument(
         'command',
