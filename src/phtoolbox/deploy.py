@@ -4,6 +4,7 @@
 import base64
 import json
 import requests
+import sys
 
 
 def deploy(args):
@@ -17,5 +18,6 @@ def deploy(args):
     print(result.text)
 
     if result.status_code != requests.codes.ok or 'failed' in result.json():
+        print("Failed to post file.", file=sys.stderr)
         return 1
     return 0

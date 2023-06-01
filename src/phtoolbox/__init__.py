@@ -58,6 +58,8 @@ def _main(user_args=None):
     return_code = 1
     if user_args.command == 'deploy':
         return_code = deploy(user_args)
+    else:
+        print(f"Unknown command: {user_args}", file=sys.stderr)
 
     sys.exit(return_code)
 
