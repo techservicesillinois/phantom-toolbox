@@ -24,7 +24,6 @@ def init_parser():
     parser.add_argument(
         'command',
         type=str,
-        nargs=1,
         help='Command to execute')
     parser.add_argument(
         "-f",
@@ -59,7 +58,7 @@ def _main(user_args=None):
     if user_args.command == 'deploy':
         return_code = deploy(user_args)
     else:
-        print(f"Unknown command: {user_args}", file=sys.stderr)
+        print(f"Unknown command: {user_args.command}", file=sys.stderr)
 
     sys.exit(return_code)
 
