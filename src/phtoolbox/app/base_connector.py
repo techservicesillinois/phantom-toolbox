@@ -35,7 +35,7 @@ class NiceBaseConnector(BaseConnector):
 
     def handle_action(self, param):
         action_id = self.get_action_identifier()
-	self.debug_version_info()
+        self.debug_version_info()
         self.debug_print("action_id", self.get_action_identifier())
 
         if action_id in self.actions.keys():
