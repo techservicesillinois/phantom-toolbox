@@ -21,9 +21,9 @@ class NiceBaseConnector(BaseConnector):
     def __init__(self):
         super(NiceBaseConnector, self).__init__()
 
-        self.__version__ = 'UNSET_VERSION'
-        self.__git_hash__ = 'UNSET_GIT_HASH'
-        self.__build_time__ = 'UNSET_BUILD_TIME'
+        self.__version__ = 'UNSET_VERSION - set self.__version__ to emit here'
+        self.__git_hash__ = 'UNSET_GIT_HASH - set self.__git_hash__ to emit here'
+        self.__build_time__ = 'UNSET_BUILD_TIME - set self.__build_time__ to emit here'
 	    
         self.actions = {}
         for _, method in inspect.getmembers(self):
