@@ -16,4 +16,5 @@ def version():
 setup(
     use_scm_version=version,
     setup_requires=['setuptools_scm', 'wheel'],
+    package_data={"phtoolbox": ["py.typed"]},
 )
