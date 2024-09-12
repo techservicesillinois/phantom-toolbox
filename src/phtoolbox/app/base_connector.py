@@ -25,11 +25,11 @@ class NiceBaseConnector(BaseConnector):
         self.__git_hash__ = 'UNSET_GIT_HASH - set self.__git_hash__ to emit here'
         self.__build_time__ = 'UNSET_BUILD_TIME - set self.__build_time__ to emit here'
 	    
-        self.actions = {}
+        self.nice_actions = {}
         for _, method in inspect.getmembers(self):
             if hasattr(method, '_handle'):
                 for action_id in getattr(method, '_handle'):
-                    self.actions[action_id] = method
+                    self.nice_actions[action_id] = method
 
         self._state = None
 
@@ -39,7 +39,7 @@ class NiceBaseConnector(BaseConnector):
         self.debug_print("action_id", self.get_action_identifier())
 
         if action_id in self.actions.keys():
-            return self.actions[action_id](param)
+            return self.nice_actions[action_id](param)
 
         return phantom.APP_ERROR
 
