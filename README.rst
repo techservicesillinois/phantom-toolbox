@@ -5,8 +5,15 @@
 About
 =====
 
-The phantom-toolbox plugin allows retrieving temporary Amazon credentials
-by authenticating against a SAML Identity Provider (IdP).
+The phantom-toolbox provides shared standardized functionality for creating and deploying Splunk SOAR applications.
+
+This project includes:
+
++ A recipe for packaging a Python SOAR app and needed libraries for deployment to Splunk SOAR
++ A deploy script that can publish a SOAR app through the SOAR API
++ A nicer BaseConnector Python module that requires substantially less boilerplate code repetition
+
+Each of these functions should work in isolation, but be aware that our own apps use all of these elements together.
 
 End-of-Life and End-of-Support Dates
 ====================================
