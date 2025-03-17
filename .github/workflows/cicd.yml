@@ -7,17 +7,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0  # setuptools_scm needs this to calculate the version
 
     - name: Set up Python 3.9
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: 3.9
 
     - name: Save pip cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ secrets.CACHE_VERSION }}
@@ -43,7 +43,7 @@ jobs:
       run: make check
 
     - name: Archive build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: build
         path: |
@@ -64,14 +64,14 @@ jobs:
 
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
 
     - name: Download build artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: build
 
@@ -83,7 +83,7 @@ jobs:
       run: echo "::set-output name=dir::$(python -m pip cache dir)"
 
     - name: Save pip cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ${{ steps.pip-cache.outputs.dir }}
         key: ${{ runner.os }}-pip-${{ secrets.CACHE_VERSION }}
@@ -94,7 +94,7 @@ jobs:
 
     - name: Cache tox virtualenv & wheel cache
       id: ghcache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: |
             **/.tox
@@ -155,7 +155,7 @@ jobs:
 #      run: make coverage report
 
     - name: Archive coverage report
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: coverage-${{ runner.os }}-py${{ matrix.python-version }}
         path: htmlcov
@@ -165,14 +165,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python 3.9
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: 3.9
 
     - name: Save pip cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ secrets.CACHE_VERSION }}
@@ -186,7 +186,7 @@ jobs:
         make deps-publish
 
     - name: Download build artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: build
 
