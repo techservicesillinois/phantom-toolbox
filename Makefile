@@ -11,6 +11,12 @@ TOX_ENV := .tox/wheel/pyvenv.cfg
 WHEEL = $(wildcard dist/*.whl)
 PIP = python -m pip install --upgrade --upgrade-strategy eager
 
+PYTHON_VERSIONS = 3.9 3.10 3.11 3.12 3.13
+comma := ,
+empty :=
+space := $(empty) $(empty)
+export TOX_PYTHON_VERSIONS := $(subst $(space),$(comma),$(patsubst %,py%,$(subst .,,$(PYTHON_VERSIONS))))
+
 .PHONY: all check install test lint static develop develop-coverage
 .PHONY: freeze shell clean docs coverage doctest win-tox
 
@@ -75,24 +81,22 @@ tox: .python-version build | cache
 	tox --installpkg $(WHEEL)
 
 .python-version:
-	pyenv install -s 3.7.9
-	pyenv install -s 3.8.6
-	pyenv install -s 3.9.0
-	pyenv local 3.7.9 3.8.6 3.9.0
+	pyenv install -s $(PYTHON_VERSIONS)
+	pyenv local $(PYTHON_VERSIONS)
 
 # Run tests on multiple versions of Python (Windows only)
 win-tox: .win-tox build | cache
 	tox --installpkg $(WHEEL)
 
 .win-tox:
-	pyenv install 3.5.4 3.6.8 3.7.9 3.8.7 3.9.1
-	python scripts/windows_bat.py 3.5.4 3.6.8 3.7.9 3.8.7 3.9.1
+	pyenv install $(PYTHON_VERSIONS)
+	python scripts/windows_bat.py $(PYTHON_VERSIONS)
 	touch $@
 
 # Run tests against wheel installed in virtualenv
-# test: lint static check .coverage  # TODO: Add coverage back when working
-test: lint static check acceptance_test
+test: lint static check .coverage acceptance_test
 
+robot: accept
 accept: acceptance_test
 acceptance_test: deps-test .install
 	robot tests/robot

@@ -8,8 +8,7 @@ import sys
 
 
 def deploy(args):
-    file_contents = open(args.file, 'rb').read()
-    encoded_contents = base64.b64encode(file_contents)
+    encoded_contents = base64.b64encode(args.file.read())
     payload = {'app': encoded_contents.decode('ascii')}
     headers = {'ph-auth-token': args.token}
     result = requests.post(f'https://{args.hostname}/rest/app',

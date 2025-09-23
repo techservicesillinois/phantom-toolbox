@@ -1,18 +1,37 @@
 #!/usr/bin/python
 """
-description:
-Helps deploy Splunk SOAR apps
-
 example:
-phantom deploy --file app.tar
-phantom deploy --file app.tar --token TOKEN --hostname example.com
+phantom deploy app.tar
+phantom deploy --token TOKEN --hostname example.com app.tar
+phantom deps -i src/app.json -o dist/app.json wheels
 """
 
 import argparse
+import json
 import os
 import sys
 
 from .deploy import deploy
+from .deps import deps
+
+
+def directory(path):
+    if not os.path.isdir(path):
+        raise argparse.ArgumentTypeError(f"{path}: not a valid directory.")
+    return path
+
+
+def json_file(path):
+    if path == "-":
+        return json.load(sys.stdin)
+    if not os.path.isfile(path):
+        raise argparse.ArgumentTypeError(f"{path}: not a valid file.")
+    try:
+        with open(path, 'r') as f:
+            r = json.load(f)
+    except Exception as e:
+        raise argparse.ArgumentTypeError(f"{path}: not a valid JSON file: {e}")
+    return r
 
 
 def init_parser():
@@ -21,48 +40,82 @@ def init_parser():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         prog="phantom"
     )
-    parser.add_argument(
-        'command',
-        type=str,
-        help='Command to execute')
-    parser.add_argument(
-        "-f",
-        "--file",
-        type=str,
-        help="Tar file to deploy",
-        required=True)
-    parser.add_argument(
+    subparsers = parser.add_subparsers(
+    )
+
+    deploy = subparsers.add_parser(
+        'deploy',
+        help="Deploy Splunk SOAR apps",
+    )
+    deploy.set_defaults(func=_deploy)
+    deploy.add_argument(
+        "file",
+        metavar="FILE",
+        type=argparse.FileType('rb'),
+        help="Tar file to deploy")
+    deploy.add_argument(
         "-t",
         "--token",
         type=str,
         help="Phantom api auth token",
         required=False)
-    parser.add_argument(
+    deploy.add_argument(
         "-H",
         "--hostname",
         type=str,
         help="Phantom hostname",
         required=False)
+
+    dependencies = subparsers.add_parser(
+        'dependencies',
+        aliases=['deps'],
+        help="Add wheel dependencies to SOAR metadata file",
+    )
+    dependencies.set_defaults(func=deps)
+    dependencies.add_argument(
+        "dir",
+        metavar="DIR",
+        type=directory,
+        nargs=1,
+        help="A directory containing only wheels",
+    )
+    dependencies.add_argument(
+        "-i",
+        "--input-file",
+        nargs='?',
+        type=json_file,
+        default="-",
+        help="Input SOAR app metadata file",
+    )
+    dependencies.add_argument(
+        "-o",
+        "--output-file",
+        nargs='?',
+        type=argparse.FileType('w'),
+        help="Output SOAR app metadata file",
+    )
     return parser
 
 
-def _main(user_args=None):
+def _deploy(args):
+    if not args.token:
+        args.token = os.environ['SOAR_TOKEN']
 
-    if not user_args.token:
-        user_args.token = os.environ['SOAR_TOKEN']
+    if not args.hostname:
+        args.hostname = os.environ['SOAR_HOSTNAME']
 
-    if not user_args.hostname:
-        user_args.hostname = os.environ['SOAR_HOSTNAME']
+    return deploy(args)
 
-    return_code = 1
-    if user_args.command == 'deploy':
-        return_code = deploy(user_args)
+
+def _main(parser, args):
+    if hasattr(args, 'func'):
+        return args.func(args)
     else:
-        print(f"Unknown command: {user_args.command}", file=sys.stderr)
-
-    sys.exit(return_code)
+        parser.print_help(sys.stderr)
+        return 1
 
 
 def main():
-    args = init_parser().parse_args()
-    _main(user_args=args)
+    parser = init_parser()
+    args = parser.parse_args()
+    return _main(parser, args)
