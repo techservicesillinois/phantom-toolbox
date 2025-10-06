@@ -158,50 +158,51 @@ jobs:
       with:
         name: coverage-${{ runner.os }}-py${{ matrix.python-version }}
         path: htmlcov
+  # Commenting out the publish stage because we are not publishing this tool
+  # on PyPi at this time.
+  # publish:
+  #   needs: test
+  #   runs-on: ubuntu-latest
 
-  publish:
-    needs: test
-    runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - name: Set up Python 3.9
+  #     uses: actions/setup-python@v5
+  #     with:
+  #       python-version: 3.9
 
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v5
-      with:
-        python-version: 3.9
+  #   - name: Save pip cache
+  #     uses: actions/cache@v4
+  #     with:
+  #       path: ~/.cache/pip
+  #       key: ${{ runner.os }}-pip-${{ secrets.CACHE_VERSION }}
 
-    - name: Save pip cache
-      uses: actions/cache@v4
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ secrets.CACHE_VERSION }}
+  #   - name: Upgrade pip
+  #     run: |
+  #       python -m pip install --upgrade --upgrade-strategy eager pip
 
-    - name: Upgrade pip
-      run: |
-        python -m pip install --upgrade --upgrade-strategy eager pip
+  #   - name: Install publish dependencies
+  #     run: |
+  #       make deps-publish
 
-    - name: Install publish dependencies
-      run: |
-        make deps-publish
+  #   - name: Download build artifacts
+  #     uses: actions/download-artifact@v4
+  #     with:
+  #       name: build
 
-    - name: Download build artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: build
+  #   - name: Publish to PyPI
+  #     if: startsWith(github.ref, 'refs/tags')
+  #     run: make release
+  #     env:
+  #       TWINE_USERNAME: __token__
+  #       TWINE_PASSWORD: ${{ secrets.PROD_PYPI_TOKEN }}
+  #       TWINE_NON_INTERACTIVE: true
 
-    - name: Publish to PyPI
-      if: startsWith(github.ref, 'refs/tags')
-      run: make release
-      env:
-        TWINE_USERNAME: __token__
-        TWINE_PASSWORD: ${{ secrets.PROD_PYPI_TOKEN }}
-        TWINE_NON_INTERACTIVE: true
-
-    - name: Publish to Test PyPI
-      if: github.ref == 'refs/heads/main'
-      run: make test-release
-      env:
-        TWINE_USERNAME: __token__
-        TWINE_PASSWORD: ${{ secrets.TEST_PYPI_TOKEN }}
-        TWINE_REPOSITORY_URL: https://test.pypi.org/legacy/
-        TWINE_NON_INTERACTIVE: true
+  #   - name: Publish to Test PyPI
+  #     if: github.ref == 'refs/heads/main'
+  #     run: make test-release
+  #     env:
+  #       TWINE_USERNAME: __token__
+  #       TWINE_PASSWORD: ${{ secrets.TEST_PYPI_TOKEN }}
+  #       TWINE_REPOSITORY_URL: https://test.pypi.org/legacy/
+  #       TWINE_NON_INTERACTIVE: true
