@@ -1,4 +1,4 @@
-PACKAGE_NAME := phantom-toolbox
+PACKAGE_NAME := phantom_toolbox
 
 PKG  := src/phtoolbox
 TPKG := tests
