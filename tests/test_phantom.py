@@ -18,7 +18,6 @@ from phtoolbox.deps import deps
 def test_bad_command(monkeypatch):
     '''Test that nonsense command returns 2'''
     monkeypatch.setattr("sys.argv", ["phantom", "nonsense"])
-    # argparse.parse() raises SystemExit on error!
     e = pytest.raises(SystemExit, phtoolbox.main)
     assert e.value.code == 2
 
@@ -26,8 +25,8 @@ def test_bad_command(monkeypatch):
 def test_no_args(monkeypatch, capsys):
     '''Test that no command returns 1 and help message is shown. '''
     monkeypatch.setattr("sys.argv", ["phantom"])
-    # argparse.parse() does NOT raises SystemExit on no input
-    assert phtoolbox.main() == 1
+    e = pytest.raises(SystemExit, phtoolbox.main)
+    assert e.value.code == 1
 
     captured = capsys.readouterr()
     assert "usage" in captured.err
@@ -72,7 +71,8 @@ def test_deploy(monkeypatch, tmp_path, json_data, return_code):
         "sys.argv",
         ["phantom", "deploy", str(file.absolute())]
     )
-    assert phtoolbox.main() == return_code
+    e = pytest.raises(SystemExit, phtoolbox.main)
+    assert e.value.code == return_code
 
 
 @pytest.mark.parametrize(
