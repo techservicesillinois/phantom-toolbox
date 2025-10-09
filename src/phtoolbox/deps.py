@@ -10,6 +10,10 @@ def deps(args):
     wheel_dir = args.dir[0]
     output = args.input_file
 
+    if args.change_directory:
+        os.chdir(args.change_directory)
+    if not os.path.isdir(wheel_dir):
+        raise NotADirectoryError(f"{wheel_dir} is not a directory")
     if "pip3_dependencies" not in output:
         output["pip3_dependencies"] = {}
     if "wheel" not in output["pip3_dependencies"]:
