@@ -74,7 +74,7 @@ def init_parser():
     dependencies.add_argument(
         "dir",
         metavar="DIR",
-        type=directory,
+        type=str,
         nargs=1,
         help="A directory containing only wheels",
     )

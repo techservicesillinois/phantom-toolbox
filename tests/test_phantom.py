@@ -89,6 +89,7 @@ def test_deps(monkeypatch, capsys, input_json):
     args.dir = ["wheels"]
     args.input_file = input_json
     args.output_file = sys.stdout
+    args.change_directory = None
 
     def mock_listdir(path):
         assert path == "wheels"
@@ -100,7 +101,51 @@ def test_deps(monkeypatch, capsys, input_json):
             'dist_info': {'metadata': {'name': 'example_module'}}
         }
 
+    monkeypatch.setattr(os.path, "isdir", lambda d: True)
     monkeypatch.setattr(os, "listdir", mock_listdir)
+    monkeypatch.setattr(wheel_inspect, "inspect_wheel", mock_inspect_wheel)
+
+    deps(args)
+
+    captured = capsys.readouterr()
+    output = json.loads(captured.out)
+
+    assert output == {
+        "some_key": "some_value",
+        "pip3_dependencies": {
+            "wheel": [
+                {
+                    "module": "example_module",
+                    "input_file": "wheels/example.whl"
+                }
+            ]
+        }
+    }
+
+
+def test_deps_change_directory(tmp_path, monkeypatch, capsys):
+    '''Test deps command with --change-directory flag and tree structure.'''
+    # Create tree structure: tmp_path/dist/app/wheels/example.whl
+    wheel_dir = tmp_path / "dist" / "app" / "wheels"
+    wheel_dir.mkdir(parents=True)
+    wheel_file = wheel_dir / "example.whl"
+    wheel_file.write_text("not a real wheel file")
+
+    input_json = {"some_key": "some_value"}
+
+    args = Namespace()
+    args.dir = ["wheels"]
+    args.input_file = input_json
+    args.output_file = sys.stdout
+    args.change_directory = str(tmp_path / "dist" / "app")
+
+    def mock_inspect_wheel(fpath):
+        # Should be called with Path('wheels') / 'example.whl' after chdir
+        assert fpath == Path("wheels") / "example.whl"
+        return {
+            'dist_info': {'metadata': {'name': 'example_module'}}
+        }
+
     monkeypatch.setattr(wheel_inspect, "inspect_wheel", mock_inspect_wheel)
 
     deps(args)
