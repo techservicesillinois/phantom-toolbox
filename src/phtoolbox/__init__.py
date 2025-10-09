@@ -118,5 +118,4 @@ def _main(parser, args):
 def main():
     parser = init_parser()
     args = parser.parse_args()
-    return_code = _main(parser, args)
-    sys.exit(return_code)
+    sys.exit(_main(parser, args))
