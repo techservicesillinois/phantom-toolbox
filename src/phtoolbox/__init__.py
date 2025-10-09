@@ -65,7 +65,6 @@ def init_parser():
         type=str,
         help="Phantom hostname",
         required=False)
-
     dependencies = subparsers.add_parser(
         'dependencies',
         aliases=['deps'],
@@ -78,6 +77,17 @@ def init_parser():
         type=directory,
         nargs=1,
         help="A directory containing only wheels",
+    )
+    dependencies.add_argument(
+        "-C",
+        "--change-directory",
+        metavar="DIR",
+        nargs='?',
+        type=directory,
+        help=(
+            "Change to this directory before running. "
+            "Wheel paths will be relative to this directory."
+        ),
     )
     dependencies.add_argument(
         "-i",
