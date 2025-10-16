@@ -4,6 +4,7 @@ example:
 phantom deploy app.tar
 phantom deploy --token TOKEN --hostname example.com app.tar
 phantom deps -i src/app.json -o dist/app.json wheels
+phantom validate app.tar
 """
 
 import argparse
@@ -13,6 +14,7 @@ import sys
 
 from .deploy import deploy
 from .deps import deps
+from .validate import validate
 
 
 def directory(path):
@@ -104,6 +106,19 @@ def init_parser():
         type=argparse.FileType('w'),
         help="Output SOAR app metadata file",
     )
+    
+    # Add validate subcommand
+    validate_parser = subparsers.add_parser(
+        'validate',
+        help="Validate app.tar files before deployment",
+    )
+    validate_parser.set_defaults(func=validate)
+    validate_parser.add_argument(
+        "file",
+        metavar="FILE",
+        type=argparse.FileType('rb'),
+        help="Tar file to validate")
+    
     return parser
 
 
