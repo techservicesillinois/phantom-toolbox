@@ -79,8 +79,8 @@ def test_deploy(monkeypatch, tmp_path, json_data, return_code):
     "input_json",
     [
         {"some_key": "some_value"},
-        {"some_key": "some_value", "pip3_dependencies": {}},
-        {"some_key": "some_value", "pip3_dependencies": {"wheel": []}},
+        {"some_key": "some_value", "pip313_dependencies": {}},
+        {"some_key": "some_value", "pip313_dependencies": {"wheel": []}},
     ],
 )
 def test_deps(monkeypatch, capsys, input_json):
@@ -90,6 +90,48 @@ def test_deps(monkeypatch, capsys, input_json):
     args.input_file = input_json
     args.output_file = sys.stdout
     args.change_directory = None
+    args.pip3 = False
+
+    def mock_listdir(path):
+        assert path == "wheels"
+        return ["example.whl"]
+
+    def mock_inspect_wheel(fpath):
+        assert fpath == Path("wheels") / "example.whl"
+        return {
+            'dist_info': {'metadata': {'name': 'example_module'}}
+        }
+
+    monkeypatch.setattr(os.path, "isdir", lambda d: True)
+    monkeypatch.setattr(os, "listdir", mock_listdir)
+    monkeypatch.setattr(wheel_inspect, "inspect_wheel", mock_inspect_wheel)
+
+    deps(args)
+
+    captured = capsys.readouterr()
+    output = json.loads(captured.out)
+
+    assert output == {
+        "some_key": "some_value",
+        "pip313_dependencies": {
+            "wheel": [
+                {
+                    "module": "example_module",
+                    "input_file": "wheels/example.whl"
+                }
+            ]
+        }
+    }
+
+
+def test_deps_pip3(monkeypatch, capsys):
+    '''Test deps command'''
+    args = Namespace()
+    args.dir = ["wheels"]
+    args.input_file = {"some_key": "some_value"}
+    args.output_file = sys.stdout
+    args.change_directory = None
+    args.pip3 = True
 
     def mock_listdir(path):
         assert path == "wheels"
@@ -135,6 +177,7 @@ def test_deps_change_directory(tmp_path, monkeypatch, capsys):
     args.input_file = {"some_key": "some_value"}
     args.output_file = sys.stdout
     args.change_directory = str(tmp_path / "dist" / "app")
+    args.pip3 = False
 
     def mock_inspect_wheel(fpath):
         assert fpath == Path("wheels") / "example.whl"
@@ -151,7 +194,7 @@ def test_deps_change_directory(tmp_path, monkeypatch, capsys):
 
     assert output == {
         "some_key": "some_value",
-        "pip3_dependencies": {
+        "pip313_dependencies": {
             "wheel": [
                 {
                     "module": "example_module",
