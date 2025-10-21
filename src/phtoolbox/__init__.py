@@ -90,6 +90,14 @@ def init_parser():
         ),
     )
     dependencies.add_argument(
+        "--pip3",
+        action="store_true",
+        help=(
+            "Use deprecated pip3 instead of the default pip313 in output "
+            "metadata."
+        ),
+    )
+    dependencies.add_argument(
         "-i",
         "--input-file",
         nargs='?',
