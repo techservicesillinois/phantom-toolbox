@@ -2,6 +2,8 @@ import base64
 import json
 import os
 import sys
+import tarfile
+import tempfile
 
 from argparse import Namespace
 from pathlib import Path
@@ -13,6 +15,7 @@ import wheel_inspect
 import phtoolbox
 
 from phtoolbox.deps import deps
+from phtoolbox.validate import validate
 
 
 def test_bad_command(monkeypatch):
