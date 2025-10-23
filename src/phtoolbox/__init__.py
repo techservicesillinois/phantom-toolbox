@@ -26,6 +26,7 @@ except ImportError as ex:
         print(f"Unable to import the dependency module: {message}")
         sys.exit(1)
 
+
 def directory(path):
     if not os.path.isdir(path):
         raise argparse.ArgumentTypeError(f"{path}: not a valid directory.")
