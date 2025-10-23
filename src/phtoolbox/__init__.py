@@ -16,7 +16,7 @@ from .deploy import deploy
 try:
     from .deps import deps
 except ImportError as ex:
-    def deps(ns, message=str(ex)):
+    def deps(ns, message=str(ex)):  # type: ignore
         '''Allow use of NiceBaseConnector in
         environments that do not support `phtoolbox deps`
 
