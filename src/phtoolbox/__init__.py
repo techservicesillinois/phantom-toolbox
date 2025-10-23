@@ -23,7 +23,7 @@ except ImportError as ex:
         For example, Splunk SOAR does not typically have `wheel_inspect`,
         and we do not feel any need to package and deliver it.
         '''
-        print(f"Unable to import the dependency module. {message}")
+        print(f"Unable to import the dependency module: {message}")
         sys.exit(1)
 
 def directory(path):
