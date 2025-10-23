@@ -12,7 +12,18 @@ import os
 import sys
 
 from .deploy import deploy
-from .deps import deps
+
+try:
+    from .deps import deps
+except ImportError as ex:
+    def deps():
+        '''Allow use of NiceBaseConnector in 
+        environments that do not support `phtoolbox deps`
+
+        For example, Splunk SOAR does not typically have `wheel_inspect`,
+        and we do not feel any need to package and deliver it.
+        '''
+        raise NotImplementedError(f"Unable to import the dependency module: {ex}")
 
 
 def directory(path):
