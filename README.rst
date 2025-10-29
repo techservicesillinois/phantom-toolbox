@@ -26,7 +26,7 @@ and End-of-Support dates of this product are 6 November 2026.
 
 End-of-Life was decided upon based on these dependencies:
 
-- Python 3.13 (31 Oct 2029)
+- Python 3.13 (31 October 2029)
 - Splunk SOAR 6.3.1 (6 November 2026)
 
 Installation
