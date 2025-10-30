@@ -22,12 +22,15 @@ This product is supported by the Cybersecurity teams at the
 University of Illinois Urbana-Champaign on a best-effort basis.
 
 As of the last update to this README, the expected End-of-Life
-and End-of-Support dates of this product are 6 November 2026.
+and End-of-Support dates of this product are 29 September 2027.
+
+Per [Splunk Software Support Policy](https://www.splunk.com/en_us/legal/splunk-software-support-policy.html), each minor release of Splunk SOAR is supported for 24 months after the release. Splunk SOAR 7.0.0 Release notes give a release date of 
+29 September 2027.
 
 End-of-Life was decided upon based on these dependencies:
 
-- Python 3.13 (31 October 2029)
-- Splunk SOAR 6.3.1 (6 November 2026)
+- Python 3.13 (31 October 2029) (https://endoflife.date/python)
+- Splunk SOAR 7.0.0 (29 September 2027) [Splunk SOAR 7.0.0 Release Notes](https://help.splunk.com/en/splunk-soar/soar-on-premises/release-notes/7.0.0/splunk-soar-on-premises-release-notes/welcome-to-splunk-soar-on-premises-7.0.0)
 
 Installation
 ============
