@@ -10,22 +10,21 @@ import pytest
 import requests
 import wheel_inspect
 
-import phtoolbox
-
+from phtoolbox.cli import main
 from phtoolbox.deps import deps
 
 
 def test_bad_command(monkeypatch):
     '''Test that nonsense command returns 2'''
     monkeypatch.setattr("sys.argv", ["phantom", "nonsense"])
-    e = pytest.raises(SystemExit, phtoolbox.main)
+    e = pytest.raises(SystemExit, main)
     assert e.value.code == 2
 
 
 def test_no_args(monkeypatch, capsys):
     '''Test that no command returns 1 and help message is shown. '''
     monkeypatch.setattr("sys.argv", ["phantom"])
-    e = pytest.raises(SystemExit, phtoolbox.main)
+    e = pytest.raises(SystemExit, main)
     assert e.value.code == 1
 
     captured = capsys.readouterr()
@@ -71,7 +70,7 @@ def test_deploy(monkeypatch, tmp_path, json_data, return_code):
         "sys.argv",
         ["phantom", "deploy", str(file.absolute())]
     )
-    e = pytest.raises(SystemExit, phtoolbox.main)
+    e = pytest.raises(SystemExit, main)
     assert e.value.code == return_code
 
 
