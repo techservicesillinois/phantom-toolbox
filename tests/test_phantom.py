@@ -2,6 +2,7 @@ import base64
 import json
 import os
 import sys
+import tarfile
 
 from argparse import Namespace
 from pathlib import Path
@@ -12,6 +13,7 @@ import wheel_inspect
 
 from phtoolbox.cli import main
 from phtoolbox.deps import deps
+from phtoolbox.validate import validate, untar_app_json
 
 
 def test_bad_command(monkeypatch):
@@ -202,3 +204,36 @@ def test_deps_change_directory(tmp_path, monkeypatch, capsys):
             ]
         }
     }
+
+
+def test_untar_app_json(tmp_path):
+    '''Test utar_app_json can get an app_json file. '''
+    tarball = tmp_path / "app.tar"
+
+    app = tmp_path / "app"
+    app.mkdir()
+
+    file = tmp_path / "app" / "app.json"
+    file.write_text('{"Foo": "Bar"}')
+
+    with tarfile.open(tarball, "w") as tar:
+        tar.add(file)
+
+    assert untar_app_json(tarball) == {'Foo': 'Bar'}
+
+
+@pytest.mark.parametrize(
+    "json_data,code",
+    [
+        ({"Foo": "Bar"}, 0),  # Happy path
+        ({"Foo": ""},    1),  # Error: empty value
+    ],
+)
+def test_validate(monkeypatch, json_data, code):
+    def mock_untar_app_json(path):
+        assert path == 'foo.tar'
+        return json_data
+    monkeypatch.setattr("phtoolbox.validate.untar_app_json",
+                        mock_untar_app_json)
+
+    assert validate(Namespace(file=Namespace(name='foo.tar'))) == code
