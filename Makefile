@@ -11,7 +11,7 @@ TOX_ENV := .tox/wheel/pyvenv.cfg
 WHEEL = $(wildcard dist/*.whl)
 PIP = python -m pip install --upgrade --upgrade-strategy eager
 
-PYTHON_VERSIONS = 3.9 3.10 3.11 3.12 3.13
+PYTHON_VERSIONS = 3.10 3.11 3.12 3.13 3.14
 comma := ,
 empty :=
 space := $(empty) $(empty)
