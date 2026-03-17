@@ -14,7 +14,7 @@ authors = [
     {name = "David D. Riddle", email = "securitysupport@illinois.edu"}
 ]
 readme = "docs/readme.rst"
-license = "NCSA"
+license = { text = "NCSA" }
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Operating System :: OS Independent",
