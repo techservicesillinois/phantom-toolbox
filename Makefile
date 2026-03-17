@@ -54,7 +54,7 @@ venv: Makefile
 	python -m venv $@
 
 # Build wheel and source tarball for upload to PyPI
-build: README.rst $(SRCS)
+build: docs/readme.rst $(SRCS)
 	python setup.py sdist bdist_wheel
 	@touch $@
 
@@ -175,7 +175,6 @@ clean:
 	rm -rf .coverage .coverage.develop .lint .mypy_cache .static .tox .wheel htmlcov .twinecheck
 	rm -rf $(PKG)/__pycache__ $(TPKG)/__pycache__ $(TPKG)/cli/__pycache__/ $(TPKG)/config/__pycache__
 	rm -rf build dist src/*.egg-info .eggs
-	make -C docs clean
 
 clean-all: clean
-	rm -rf cache
+	rm -rf cache venv
