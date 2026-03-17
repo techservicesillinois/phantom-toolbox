@@ -10,6 +10,7 @@ dist
 htmlcov
 venv
 docs/src/
+_version.py
 
 .coverage
 .coverage.develop
