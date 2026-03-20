@@ -76,7 +76,7 @@ jobs:
         name: build
 
     - name: Touch Makefile targets
-      run: touch .lint .static .twinecheck build
+      run: touch .lint .static .twinecheck
 
     - name: Get pip cache dir
       id: pip-cache
