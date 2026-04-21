@@ -17,7 +17,7 @@ empty :=
 space := $(empty) $(empty)
 export TOX_PYTHON_VERSIONS := $(subst $(space),$(comma),$(patsubst %,py%,$(subst .,,$(PYTHON_VERSIONS))))
 
-.PHONY: all check install test lint static develop develop-coverage
+.PHONY: all build check install test lint static develop develop-coverage
 .PHONY: freeze shell clean docs coverage doctest win-tox
 
 all: test coverage docs doctest
@@ -54,7 +54,8 @@ venv: Makefile
 	python -m venv $@
 
 # Build wheel and source tarball for upload to PyPI
-build: docs/readme.rst $(SRCS)
+build: .build
+.build: docs/readme.rst $(SRCS)
 	python setup.py sdist bdist_wheel
 	@touch $@
 
