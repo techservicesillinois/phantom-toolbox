@@ -2,7 +2,7 @@ PACKAGE_NAME := phantom_toolbox
 
 PKG  := src/phtoolbox
 TPKG := tests
-MODULE_SRCS := $(wildcard $(PKG)/*.py)
+MODULE_SRCS := $(filter-out $(PKG)/_version.py, $(wildcard $(PKG)/*.py))
 export TSTS := $(wildcard $(TPKG)/*.py $(TPKG)/*/*.py)
 export SRCS := $(wildcard $(MODULE_SRCS) setup.py)
 HTML = htmlcov/index.html
