@@ -130,7 +130,7 @@ jobs:
 
     - name: Install tox
       run: |
-        python -m pip install --upgrade --upgrade-strategy eager tox wheel
+        make deps-github-test
 
     - name: Update Python wheel cache
       if: steps.cache.outputs.valid != 'true'

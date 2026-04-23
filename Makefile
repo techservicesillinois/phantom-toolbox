@@ -42,8 +42,11 @@ deps-doc:
 	$(PIP) Sphinx sphinx-autodoc-typehints sphinx_rtd_theme
 
 # Python packages needed to run tests
-deps-test:
-	$(PIP) coverage pytest git+https://github.com/splunk/pytest-splunk-soar-connectors.git robotframework
+deps-test: deps-github-test
+	$(PIP) coverage pytest git+https://github.com/splunk/pytest-splunk-soar-connectors.git
+
+deps-github-test:
+	$(PIP) robotframework tox wheel
 
 # Python packages needed to publish a production or test release
 deps-publish:
@@ -99,7 +102,7 @@ test: lint static check .coverage acceptance_test
 
 robot: accept
 accept: dev_acceptance_test
-dev_acceptance_test: deps-test .install
+dev_acceptance_test: .install
 	robot tests/robot
 
 acceptance_test: $(TOX_ENV)
