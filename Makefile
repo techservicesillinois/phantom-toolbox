@@ -98,9 +98,12 @@ win-tox: .win-tox build | cache
 test: lint static check .coverage acceptance_test
 
 robot: accept
-accept: acceptance_test
-acceptance_test: deps-test .install
+accept: dev_acceptance_test
+dev_acceptance_test: deps-test .install
 	robot tests/robot
+
+acceptance_test: $(TOX_ENV)
+	PATH=".tox/wheel/bin:$$PATH" robot tests/robot
 
 # Run tests with coverage tool -- generates .coverage file
 .coverage: $(TOX_ENV) $(TSTS)
