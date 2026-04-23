@@ -63,13 +63,13 @@ build: .build
 	@touch $@
 
 check: .twinecheck
-.twinecheck: build
+.twinecheck: .build
 	twine check --strict dist/*
 	@touch $@
 
 # Install wheel into tox virtualenv for testing
 install: $(TOX_ENV)
-$(TOX_ENV): build | cache
+$(TOX_ENV): .build | cache
 	tox -e wheel --notest --installpkg $(WHEEL)
 	@touch $@
 
