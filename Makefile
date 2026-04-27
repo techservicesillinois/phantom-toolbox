@@ -110,7 +110,7 @@ acceptance_test: $(TOX_ENV)
 
 win_acceptance_test: $(TOX_ENV)
 	ls -r .tox\wheel\Scripts
-	.tox\wheel\Scripts\Activate.ps1
+	.tox\wheel\Scripts\activate.ps1
 	robot tests/robot
 
 # Run tests with coverage tool -- generates .coverage file
