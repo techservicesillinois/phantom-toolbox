@@ -1,8 +1,7 @@
 #!/usr/bin/env pwsh
 $ErrorActionPreference = "Stop"
-ls -r "$(Get-Location)/.tox/wheel/"
-ls -r "$(Get-Location)/.tox/wheel/bin"
-$env:PATH="$(Get-Location)/.tox/wheel/bin:$env:PATH" 
+ls -r "$(Get-Location)/.tox/wheel/Scripts"
+$env:PATH="$(Get-Location)/.tox/wheel/Scripts:$env:PATH" 
 Write-Output "Path is " + $env:PATH
 Get-Command phantom
 phantom --help
