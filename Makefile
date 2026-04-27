@@ -109,7 +109,7 @@ acceptance_test: $(TOX_ENV)
 	PATH=".tox/wheel/bin:$$PATH" robot tests/robot
 
 win_acceptance_test: $(TOX_ENV)
-	ls -r .tox\wheel
+	ls -r .tox\wheel\Scripts
 	.tox\wheel\Scripts\Activate.ps1
 	robot tests/robot
 
