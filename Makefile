@@ -109,8 +109,11 @@ acceptance_test: $(TOX_ENV)
 	PATH=".tox/wheel/bin:$$PATH" robot tests/robot
 
 win_acceptance_test: $(TOX_ENV)
-	# ls -r .tox\wheel\Scripts
+	ls -r .tox\wheel\Scripts
 	# .tox\wheel\Scripts\activate.ps1 && robot tests/robot
+	PATH=".tox/wheel/Scripts:$$PATH" echo $$PATH
+	PATH=".tox/wheel/Scripts:$$PATH" phantom --help
+	PATH=".tox/wheel/Scripts:$$PATH" phantom.exe --help
 	PATH=".tox/wheel/Scripts:$$PATH" robot tests/robot
 
 # Run tests with coverage tool -- generates .coverage file
