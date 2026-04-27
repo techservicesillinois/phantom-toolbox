@@ -109,16 +109,7 @@ acceptance_test: $(TOX_ENV)
 	PATH=".tox/wheel/bin:$$PATH" robot tests/robot
 
 win_acceptance_test: $(TOX_ENV)
-	Write-Output "************* Win Accept Test ***********************"
-	ls -r .tox\wheel\Scripts
-	# .tox\wheel\Scripts\activate.ps1 && robot tests/robot
-	$$env:PATH=".tox/wheel/Scripts:$$env:PATH" Write-Output "Path is " + $$env:PATH
-	$$env:PATH=".tox/wheel/Scripts:$$env:PATH" which phantom
-	$$env:PATH=".tox/wheel/Scripts:$$env:PATH" phantom --help
-	$$env:PATH=".tox/wheel/Scripts:$$env:PATH" phantom.exe --help
-	Write-Output "************* End of Debug for Win Accept Test ***********************"
-	$$env:PATH=".tox/wheel/Scripts:$$env:PATH" robot tests/robot
-	Write-Output "************* End of Win Accept Test ***********************"
+	./tests/robot/test_robot.ps1
 
 # Run tests with coverage tool -- generates .coverage file
 .coverage: $(TOX_ENV) $(TSTS)
