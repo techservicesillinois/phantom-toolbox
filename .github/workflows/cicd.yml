@@ -126,7 +126,9 @@ jobs:
         python -m pip install --upgrade --upgrade-strategy eager pip
 
     - name: Touch Makefile targets
-      run: touch .lint .static .twinecheck .build
+      run: | 
+        touch .build
+        touch .lint .static .twinecheck
       
     - name: Install tox
       run: |
