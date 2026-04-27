@@ -140,9 +140,15 @@ jobs:
       if: steps.tox.outputs.valid != 'true'
       run: make install
 
-    - name: Run acceptance tests
+    - name: Run POSIX acceptance tests
+      if: matrix.os != 'windows-latest'
       run: |
         make acceptance_test
+
+    - name: Run Windows acceptance tests
+      if: matrix.os == 'windows-latest'
+      run: |
+        make win_acceptance_test
 
     - name: Installed dependencies
       run: make freeze

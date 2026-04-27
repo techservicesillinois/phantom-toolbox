@@ -108,6 +108,10 @@ dev_acceptance_test: .install
 acceptance_test: $(TOX_ENV)
 	PATH=".tox/wheel/bin:$$PATH" robot tests/robot
 
+win_acceptance_test: $(TOX_ENV)
+	.tox\wheel\bin\activate.ps1
+	robot tests/robot
+
 # Run tests with coverage tool -- generates .coverage file
 .coverage: $(TOX_ENV) $(TSTS)
 	$(TOX)
