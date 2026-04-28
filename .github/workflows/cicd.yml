@@ -166,6 +166,21 @@ jobs:
       with:
         name: coverage-${{ runner.os }}-py${{ matrix.python-version }}
         path: htmlcov
+
+  ######################################################
+  # This check supports branch protection rules
+  # This can be retired when we start publishing
+  # (update branch rules when this is retired)
+  required-checks-pass:
+    needs: test
+    runs-on: ubuntu-latest
+    if: always() # Ensures it runs even if tests fail
+    steps:
+      - name: Check test results
+        if: needs.test.result != 'success'
+        run: exit 1
+  ######################################################
+
   # Commenting out the publish stage because we are not publishing this tool
   # on PyPi at this time.
   # publish:
