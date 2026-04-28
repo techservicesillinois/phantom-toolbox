@@ -10,7 +10,9 @@ dist
 htmlcov
 venv
 docs/src/
+_version.py
 
+.build
 .coverage
 .coverage.develop
 .eggs

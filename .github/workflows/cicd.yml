@@ -11,10 +11,10 @@ jobs:
       with:
         fetch-depth: 0  # setuptools_scm needs this to calculate the version
 
-    - name: Set up Python 3.9
+    - name: Set up Python 3.10
       uses: actions/setup-python@v5
       with:
-        python-version: 3.9
+        python-version: "3.10"
 
     - name: Save pip cache
       uses: actions/cache@v4
@@ -60,7 +60,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["3.9","3.10","3.11", "3.12"]
+        python-version: ["3.10","3.11", "3.12", "3.13", "3.14"]
 
 
     steps:
@@ -74,9 +74,6 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: build
-
-    - name: Touch Makefile targets
-      run: touch .lint .static .twinecheck
 
     - name: Get pip cache dir
       id: pip-cache
@@ -128,9 +125,14 @@ jobs:
       run: |
         python -m pip install --upgrade --upgrade-strategy eager pip
 
+    - name: Touch Makefile targets
+      run: | 
+        touch .build
+        touch .lint .static .twinecheck
+      
     - name: Install tox
       run: |
-        python -m pip install --upgrade --upgrade-strategy eager tox wheel
+        make deps-github-test
 
     - name: Update Python wheel cache
       if: steps.cache.outputs.valid != 'true'
@@ -140,9 +142,15 @@ jobs:
       if: steps.tox.outputs.valid != 'true'
       run: make install
 
-    - name: Run acceptance tests
+    - name: Run POSIX acceptance tests
+      if: matrix.os != 'windows-latest'
       run: |
         make acceptance_test
+
+    - name: Run Windows acceptance tests
+      if: matrix.os == 'windows-latest'
+      run: |
+        make win_acceptance_test
 
     - name: Installed dependencies
       run: make freeze
@@ -166,10 +174,10 @@ jobs:
 
   #   steps:
   #   - uses: actions/checkout@v4
-  #   - name: Set up Python 3.9
+  #   - name: Set up Python 3.10
   #     uses: actions/setup-python@v5
   #     with:
-  #       python-version: 3.9
+  #       python-version: "3.10"
 
   #   - name: Save pip cache
   #     uses: actions/cache@v4

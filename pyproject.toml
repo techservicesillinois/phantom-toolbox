@@ -2,6 +2,68 @@
 requires = ["setuptools>=45", "wheel", "setuptools_scm>=6.2"]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "phantom-toolbox"
+dynamic = ["version"]
+dependencies = [
+    "requests",
+    "wheel-inspect",
+]
+description = "Splunk SOAR Application development libraries and utilities"
+authors = [
+    {name = "David D. Riddle", email = "securitysupport@illinois.edu"}
+]
+readme = "docs/readme.rst"
+license = { text = "NCSA" }
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Operating System :: OS Independent",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Security",
+    "Topic :: Utilities",
+]
+requires-python = ">=3.10"
+
+[project.urls]
+Homepage = "https://github.com/techservicesillinois/phantom-toolbox/"
+"Bug Reports" = "https://github.com/techservicesillinois/phantom-toolbox/issues"
+Source = "https://github.com/techservicesillinois/phantom-toolbox/"
+Changelog = "https://github.com/techservicesillinois/phantom-toolbox/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "coverage",
+    "setuptools_scm", # Hack to install pytest-splunk-soar-connectors
+    "pytest-splunk-soar-connectors @ git+https://github.com/splunk/pytest-splunk-soar-connectors.git",
+]
+
+[project.scripts]
+phantom = "phtoolbox.cli:main"
+
+[options]
+include-package-data = true
+
+[options.package_data]
+phtoolbox = "py.typed"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools_scm]
+version_file = "src/phtoolbox/_version.py"
+local_scheme = "dirty-tag"
+
 [tool.pytest.ini_options]
 minversion = "7.2"
 pythonpath = "src"

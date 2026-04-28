@@ -25,27 +25,27 @@ so we recommend ensuring setuptools is up to date before installing::
 Usage
 =====
 
-The following `__init__` and `handle_action` boilerplate are required:
+The following `__init__` and `handle_action` boilerplate are required::
 
-```python
-class ExampleConnector(BaseConnector, NiceBaseConnector):
-    def __init__(self):
-        BaseConnector.__init__(self)
-        NiceBaseConnector.__init__(
-            self, phantom.APP_SUCCESS, phantom.APP_ERROR)
+    ```python
+    class ExampleConnector(BaseConnector, NiceBaseConnector):
+        def __init__(self):
+            BaseConnector.__init__(self)
+            NiceBaseConnector.__init__(
+                self, phantom.APP_SUCCESS, phantom.APP_ERROR)
 
-    def handle_action(self, param):
-        # handle_action is an abstract method; it MUST be implemented here.
-        self.nice_handle_action(param)
-```
+        def handle_action(self, param):
+            # handle_action is an abstract method; it MUST be implemented here.
+            self.nice_handle_action(param)
+    ```
 
-The decorator `@handle` is used to register a handler to process an action:
+The decorator `@handle` is used to register a handler to process an action::
 
-```python
-    @handle('add')
-    def _handle_add(self, param):
-        action_result = self.add_action_result(ActionResult(dict(param)))
+    ```python
+        @handle('add')
+        def _handle_add(self, param):
+            action_result = self.add_action_result(ActionResult(dict(param)))
 
-        return action_result.set_status(phantom.APP_SUCCESS,
-                                        f"Sum {self.x + self.y}")
-```
+            return action_result.set_status(phantom.APP_SUCCESS,
+                                            f"Sum {self.x + self.y}")
+    ```

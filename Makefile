@@ -2,7 +2,7 @@ PACKAGE_NAME := phantom_toolbox
 
 PKG  := src/phtoolbox
 TPKG := tests
-MODULE_SRCS := $(wildcard $(PKG)/*.py)
+MODULE_SRCS := $(filter-out $(PKG)/_version.py, $(wildcard $(PKG)/*.py))
 export TSTS := $(wildcard $(TPKG)/*.py $(TPKG)/*/*.py)
 export SRCS := $(wildcard $(MODULE_SRCS) setup.py)
 HTML = htmlcov/index.html
@@ -11,13 +11,13 @@ TOX_ENV := .tox/wheel/pyvenv.cfg
 WHEEL = $(wildcard dist/*.whl)
 PIP = python -m pip install --upgrade --upgrade-strategy eager
 
-PYTHON_VERSIONS = 3.9 3.10 3.11 3.12 3.13
+PYTHON_VERSIONS = 3.10 3.11 3.12 3.13 3.14
 comma := ,
 empty :=
 space := $(empty) $(empty)
 export TOX_PYTHON_VERSIONS := $(subst $(space),$(comma),$(patsubst %,py%,$(subst .,,$(PYTHON_VERSIONS))))
 
-.PHONY: all check install test lint static develop develop-coverage
+.PHONY: all build check install test lint static develop develop-coverage
 .PHONY: freeze shell clean docs coverage doctest win-tox
 
 all: test coverage docs doctest
@@ -42,8 +42,11 @@ deps-doc:
 	$(PIP) Sphinx sphinx-autodoc-typehints sphinx_rtd_theme
 
 # Python packages needed to run tests
-deps-test:
-	$(PIP) coverage pytest git+https://github.com/splunk/pytest-splunk-soar-connectors.git robotframework
+deps-test: deps-github-test
+	$(PIP) coverage pytest git+https://github.com/splunk/pytest-splunk-soar-connectors.git
+
+deps-github-test:
+	$(PIP) robotframework tox wheel
 
 # Python packages needed to publish a production or test release
 deps-publish:
@@ -54,18 +57,19 @@ venv: Makefile
 	python -m venv $@
 
 # Build wheel and source tarball for upload to PyPI
-build: README.rst $(SRCS)
+build: .build
+.build: docs/readme.rst $(SRCS)
 	python setup.py sdist bdist_wheel
 	@touch $@
 
 check: .twinecheck
-.twinecheck: build
+.twinecheck: .build
 	twine check --strict dist/*
 	@touch $@
 
 # Install wheel into tox virtualenv for testing
 install: $(TOX_ENV)
-$(TOX_ENV): build | cache
+$(TOX_ENV): .build | cache
 	tox -e wheel --notest --installpkg $(WHEEL)
 	@touch $@
 
@@ -94,12 +98,18 @@ win-tox: .win-tox build | cache
 	touch $@
 
 # Run tests against wheel installed in virtualenv
-test: lint static check .coverage acceptance_test
+test: lint static check .coverage
 
 robot: accept
-accept: acceptance_test
-acceptance_test: deps-test .install
+accept: dev_acceptance_test
+dev_acceptance_test: .install
 	robot tests/robot
+
+acceptance_test: $(TOX_ENV)
+	PATH=".tox/wheel/bin:$$PATH" robot tests/robot
+
+win_acceptance_test: $(TOX_ENV)
+	./tests/robot/test_robot.ps1
 
 # Run tests with coverage tool -- generates .coverage file
 .coverage: $(TOX_ENV) $(TSTS)
@@ -175,7 +185,6 @@ clean:
 	rm -rf .coverage .coverage.develop .lint .mypy_cache .static .tox .wheel htmlcov .twinecheck
 	rm -rf $(PKG)/__pycache__ $(TPKG)/__pycache__ $(TPKG)/cli/__pycache__/ $(TPKG)/config/__pycache__
 	rm -rf build dist src/*.egg-info .eggs
-	make -C docs clean
 
 clean-all: clean
-	rm -rf cache
+	rm -rf cache venv
