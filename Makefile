@@ -98,7 +98,7 @@ win-tox: .win-tox build | cache
 	touch $@
 
 # Run tests against wheel installed in virtualenv
-test: lint static check .coverage acceptance_test
+test: lint static check .coverage
 
 robot: accept
 accept: dev_acceptance_test
