@@ -106,6 +106,7 @@ dev_acceptance_test: .install
 	robot tests/robot
 
 acceptance_test: $(TOX_ENV)
+	exit 1
 	PATH=".tox/wheel/bin:$$PATH" robot tests/robot
 
 win_acceptance_test: $(TOX_ENV)
